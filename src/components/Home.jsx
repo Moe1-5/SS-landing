@@ -9,6 +9,11 @@ function Home() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
     const testimonialsRef = useRef(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isFlipping, setIsFlipping] = useState(false);
+    const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+    const [formStatus, setFormStatus] = useState('');
+    const [isFormLoading, setIsFormLoading] = useState(false);
 
     const projects = [
         {
@@ -31,27 +36,7 @@ function Home() {
         }
     ];
 
-    const testimonials = [
-        {
-            text: "Smart Swipe's QR ordering system revolutionized our restaurant operations. Our customers love the seamless experience!",
-            author: "Maria Chen, Owner of Tasty Bistro"
-        },
-        {
-            text: "Their custom website increased our online visibility and sales beyond what we thought possible. Incredible ROI.",
-            author: "James Wilson, CEO of Stellar Goods"
-        },
-        {
-            text: "The inventory management system Smart Swipe built for us saved countless hours and virtually eliminated human error.",
-            author: "Sarah Johnson, Operations Manager at FreshMart"
-        },
-        {
-            text: "Implementation was smooth and their support team is always responsive. Best technology investment we've made.",
-            author: "Michael Rodriguez, CTO at TechSolutions"
-        }
-    ];
 
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isFlipping, setIsFlipping] = useState(false);
 
     // Improved project carousel with smooth transitions
     const nextProject = () => {
@@ -106,8 +91,55 @@ function Home() {
         return () => window.removeEventListener('resize', handleResize);
     }, [mobileMenuOpen]);
 
+
+    const handleFormChange = (e) => {
+        // Updates state whenever an input field changes
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleFormSubmit = async (e) => {
+        // Runs when the form is submitted
+        e.preventDefault(); // Prevent default page reload
+        setIsFormLoading(true); // Set loading state
+        setFormStatus(''); // Clear previous status messages
+
+        try {
+            // Send data to the Vercel serverless function endpoint
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData), // Convert state data to JSON string
+            });
+
+            // Get the response back from the serverless function
+            const result = await response.json();
+
+            if (response.ok) {
+                // If the API call was successful (status 2xx)
+                setFormStatus('Success: Message sent successfully!');
+                setFormData({ name: '', email: '', subject: '', message: '' }); // Clear the form fields
+            } else {
+                // If the API call failed (status 4xx or 5xx)
+                setFormStatus(`Error: ${result.error || 'Failed to send message. Please check details.'}`);
+            }
+        } catch (error) {
+            // If there was a network error or other issue with the fetch call itself
+            console.error('Form submission error:', error);
+            setFormStatus('Error: Could not submit form. Please check your connection and try again.');
+        } finally {
+            // Runs whether the submission succeeded or failed
+            setIsFormLoading(false); // Reset loading state
+        }
+    };
+
     return (
-        <div className="bg-grey-50 text-gray-900 min-h-screen flex flex-col">
+        <div className="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
             {/* Navbar - Improved gradient and alignment */}
             <nav className="bg-gradient-to-r from-blue-800 to-indigo-900 shadow-lg fixed w-full top-0 z-50">
                 <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
@@ -129,7 +161,7 @@ function Home() {
                         <a href="#hero" className="relative text-white font-medium after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-300 after:transition-all after:duration-300 hover:after:w-full">Home</a>
                         <a href="#services" className="relative text-white font-medium after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-300 after:transition-all after:duration-300 hover:after:w-full">Services</a>
                         <a href="#projects" className="relative text-white font-medium after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-300 after:transition-all after:duration-300 hover:after:w-full">Projects</a>
-                        <a href="#testimonials" className="relative text-white font-medium after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-300 after:transition-all after:duration-300 hover:after:w-full">Testimonials</a>
+                        <a href="#about" className="relative text-white font-medium after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-300 after:transition-all after:duration-300 hover:after:w-full">About Us</a>
                         <a href="#contact" className="relative text-white font-medium after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-blue-300 after:transition-all after:duration-300 hover:after:w-full">Contact</a>
                     </div>
 
@@ -157,7 +189,7 @@ function Home() {
                             <a href="#hero" className="text-white text-lg hover:text-blue-300 transition" onClick={() => setMobileMenuOpen(false)}>Home</a>
                             <a href="#services" className="text-white text-lg hover:text-blue-300 transition" onClick={() => setMobileMenuOpen(false)}>Services</a>
                             <a href="#projects" className="text-white text-lg hover:text-blue-300 transition" onClick={() => setMobileMenuOpen(false)}>Projects</a>
-                            <a href="#testimonials" className="text-white text-lg hover:text-blue-300 transition" onClick={() => setMobileMenuOpen(false)}>Testimonials</a>
+                            <a href="#about" className="text-white text-lg hover:text-blue-300 transition" onClick={() => setMobileMenuOpen(false)}>About Us</a>
                             <a href="#contact" className="text-white text-lg hover:text-blue-300 transition" onClick={() => setMobileMenuOpen(false)}>Contact</a>
 
                             <div className="pt-4 flex flex-col space-y-3">
@@ -227,7 +259,7 @@ function Home() {
             <section id="services" className="py-16 sm:py-20 px-4 sm:px-8 bg-white">
                 <div className="container mx-auto">
                     <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-                        <h2 className="text-3xl sm:text-4xl font-bold mb-4">Services</h2>
+                        <h2 className="text-3xl sm:text-4xl font-bold mb-4"> Our Services</h2>
                         <p className="text-gray-600">Delivering innovative software solutions to address your business challenges and boost efficiency.</p>
                     </div>
 
@@ -411,53 +443,74 @@ function Home() {
                     </div>
                 </div>
             </section>
-
-            {/* Testimonials - Improved animation and styling */}
-            <section id="testimonials" className="py-20 bg-white overflow-hidden relative" ref={testimonialsRef}>
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl sm:text-4xl font-bold mb-4">What Our Clients Say</h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">
-                            Trusted by businesses across industries to deliver software that makes a difference.
-                        </p>
-                    </div>
-
-                    <div className="relative max-w-6xl mx-auto overflow-hidden">
+            {/* --- START: NEW About Us Section --- */}
+            <section id="about" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50"> {/* Subtle gradient background */}
+                <div className="container mx-auto px-4 sm:px-6">
+                    <div className="max-w-4xl mx-auto text-center">
+                        {/* Section Title and Intro */}
                         <motion.div
-                            className="flex gap-6"
-                            initial={{ x: "0%" }}
-                            animate={{ x: "-100%" }}
-                            transition={{
-                                repeat: Infinity,
-                                repeatType: "loop",
-                                duration: 30,
-                                ease: "linear",
-                            }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }} // Animate when section scrolls into view
+                            viewport={{ once: true, amount: 0.5 }} // Trigger animation once
+                            transition={{ duration: 0.6 }}
                         >
-                            {testimonials.concat(testimonials).map((testimonial, index) => (
-                                <div
-                                    key={index}
-                                    className="bg-gray-50 border border-gray-100 rounded-xl p-6 min-w-[300px] sm:min-w-[380px] shadow-sm flex flex-col"
-                                >
-                                    <div className="flex mb-4 text-yellow-400">
-                                        {[...Array(5)].map((_, i) => (
-                                            <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                        ))}
-                                    </div>
-                                    <p className="italic text-gray-700 flex-grow">"{testimonial.text}"</p>
-                                    <h4 className="mt-4 font-semibold text-gray-900">- {testimonial.author}</h4>
-                                </div>
-                            ))}
+                            <h2 className="text-3xl sm:text-4xl font-bold text-indigo-900 mb-6">About SmartSwipe</h2>
+                            <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            </p>
                         </motion.div>
+
+                        {/* Mission Box */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.5 }}
+                            transition={{ duration: 0.6, delay: 0.2 }} // Staggered animation
+                        >
+                            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 mb-10">
+                                <h3 className="text-2xl font-semibold text-blue-800 mb-4">Our Mission</h3>
+                                <p className="text-gray-600 leading-relaxed">
+                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        {/* Vision Box */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.5 }}
+                            transition={{ duration: 0.6, delay: 0.4 }} // Staggered animation
+                        >
+                            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                                <h3 className="text-2xl font-semibold text-blue-800 mb-4">Our Vision</h3>
+                                <p className="text-gray-600 leading-relaxed">
+                                    Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        {/* Optional Placeholder for future content */}
+                        {/*
+                         <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.5 }}
+                            transition={{ duration: 0.6, delay: 0.6 }}
+                         >
+                            <div className="mt-16">
+                                <p className="text-gray-500">More about our team and values coming soon...</p>
+                            </div>
+                         </motion.div>
+                         */}
                     </div>
                 </div>
             </section>
+            {/* --- END: NEW About Us Section --- */}
 
-            {/* Contact Form - Enhanced styling and accessibility */}
             <section id="contact" className="py-20 bg-gradient-to-b from-indigo-900 to-blue-900 text-center px-4">
                 <div className="container mx-auto max-w-4xl">
+                    {/* ... (heading text remains the same) ... */}
                     <div className="mb-12">
                         <h2 className="text-3xl sm:text-4xl text-white font-bold mb-4">Ready to Transform Your Business?</h2>
                         <p className="text-blue-100 text-lg">
@@ -466,15 +519,20 @@ function Home() {
                     </div>
 
                     <div className="bg-white rounded-xl shadow-xl p-8 sm:p-10">
-                        <form className="space-y-6">
+                        {/* --- START: Update Form Element --- */}
+                        {/* Add the onSubmit handler to the form tag */}
+                        <form className="space-y-6" onSubmit={handleFormSubmit}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="flex flex-col">
                                     <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-700 text-left">Your Name</label>
                                     <input
                                         id="name"
+                                        name="name" // Add name attribute (should match state key)
                                         type="text"
                                         placeholder="John Smith"
                                         className="w-full bg-gray-50 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                        value={formData.name} // Bind input value to state
+                                        onChange={handleFormChange} // Add onChange handler
                                         required
                                     />
                                 </div>
@@ -482,9 +540,12 @@ function Home() {
                                     <label htmlFor="email" className="mb-2 text-sm font-medium text-gray-700 text-left">Your Email</label>
                                     <input
                                         id="email"
+                                        name="email" // Add name attribute
                                         type="email"
                                         placeholder="johnsmith@example.com"
                                         className="w-full bg-gray-50 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                        value={formData.email} // Bind input value to state
+                                        onChange={handleFormChange} // Add onChange handler
                                         required
                                     />
                                 </div>
@@ -494,9 +555,12 @@ function Home() {
                                 <label htmlFor="subject" className="mb-2 text-sm font-medium text-gray-700 text-left">Subject</label>
                                 <input
                                     id="subject"
+                                    name="subject" // Add name attribute
                                     type="text"
                                     placeholder="Inquiry about custom software solutions"
                                     className="w-full bg-gray-50 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    value={formData.subject} // Bind input value to state
+                                    onChange={handleFormChange} // Add onChange handler
                                     required
                                 />
                             </div>
@@ -505,23 +569,34 @@ function Home() {
                                 <label htmlFor="message" className="mb-2 text-sm font-medium text-gray-700 text-left">Your Message</label>
                                 <textarea
                                     id="message"
+                                    name="message" // Add name attribute
                                     rows="5"
                                     placeholder="Tell us about your business needs..."
                                     className="w-full bg-gray-50 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    value={formData.message} // Bind input value to state
+                                    onChange={handleFormChange} // Add onChange handler
                                     required
                                 />
                             </div>
 
+                            {formStatus && (
+                                <p className={`text-sm mt-4 ${formStatus.startsWith('Error') ? 'text-red-600' : 'text-green-600'}`}>
+                                    {formStatus}
+                                </p>
+                            )}
                             <button
                                 type="submit"
-                                className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all"
+                                // Add conditional styling/disabling based on loading state
+                                className={`w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all ${isFormLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={isFormLoading}
                             >
-                                Send Message
+                                {isFormLoading ? 'Sending...' : 'Send Message'}
                             </button>
                         </form>
                     </div>
                 </div>
             </section>
+
         </div>
     )
 }
