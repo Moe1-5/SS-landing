@@ -102,19 +102,17 @@ function Home() {
     };
 
     const handleFormSubmit = async (e) => {
-        // Runs when the form is submitted
-        e.preventDefault(); // Prevent default page reload
-        setIsFormLoading(true); // Set loading state
-        setFormStatus(''); // Clear previous status messages
+        e.preventDefault();
+        setIsFormLoading(true);
+        setFormStatus('');
 
         try {
-            // Send data to the Vercel serverless function endpoint
             const response = await fetch('/api/contact-support', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData), // Convert state data to JSON string
+                body: JSON.stringify(formData),
             });
 
             // Get the response back from the serverless function
