@@ -109,7 +109,7 @@ function Home() {
 
         try {
             // Send data to the Vercel serverless function endpoint
-            const response = await fetch('/api/contact', {
+            const response = await fetch('/api/contact-support', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
