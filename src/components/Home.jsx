@@ -165,7 +165,7 @@ function Home() {
 
                     {/* Desktop Buttons - Improved styling and consistency */}
                     <div className="hidden md:flex items-center space-x-4">
-                        <button className="bg-transparent border-2 border-blue-300 text-blue-300 px-5 py-2 rounded-lg font-medium hover:bg-blue-300 hover:text-indigo-900 transition duration-300" onClick={() => handleDirectBtn('/services')}>
+                        <button className="bg-transparent border-2 border-blue-300 text-blue-300 px-5 py-2 rounded-lg font-medium hover:bg-blue-300 hover:text-indigo-900 transition duration-300" onClick={() => handleDirectBtn('/explore-solutions')}>
                             Our Services
                         </button>
                         <button className="bg-blue-500 text-white px-5 py-2 rounded-lg font-medium shadow-md hover:bg-blue-600 transition duration-300 flex items-center" onClick={() => handleDirectBtn('/contact-us')}>
@@ -191,7 +191,7 @@ function Home() {
                             <a href="#contact" className="text-white text-lg hover:text-blue-300 transition" onClick={() => setMobileMenuOpen(false)}>Contact</a>
 
                             <div className="pt-4 flex flex-col space-y-3">
-                                <button className="bg-transparent border-2 border-blue-300 text-blue-300 px-6 py-2 rounded-lg font-medium hover:bg-blue-300 hover:text-indigo-900 transition duration-300 w-full" onClick={() => handleDirectBtn('/services')}>
+                                <button className="bg-transparent border-2 border-blue-300 text-blue-300 px-6 py-2 rounded-lg font-medium hover:bg-blue-300 hover:text-indigo-900 transition duration-300 w-full" onClick={() => handleDirectBtn('/explore-solutions')}>
                                     Our Services
                                 </button>
                                 <button className="bg-blue-500 text-white px-6 py-3 rounded-lg font-medium shadow-md hover:bg-blue-600 transition duration-300 w-full flex items-center justify-center" onClick={() => handleDirectBtn('/contact-us')}>
@@ -215,7 +215,7 @@ function Home() {
                             We create custom software solutions that streamline operations, enhance customer experiences, and drive growth for businesses of all sizes.
                         </p>
                         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                            <button className="bg-blue-500 text-white px-8 py-3 rounded-lg shadow-md font-medium hover:bg-blue-600 transition duration-300 flex items-center justify-center w-full sm:w-auto" onClick={() => handleDirectBtn('/services')}>
+                            <button className="bg-blue-500 text-white px-8 py-3 rounded-lg shadow-md font-medium hover:bg-blue-600 transition duration-300 flex items-center justify-center w-full sm:w-auto" onClick={() => handleDirectBtn('/explore-solutions')}>
                                 Explore Solutions <FaArrowRight className="ml-2" />
                             </button>
                             <button className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white/10 transition duration-300 w-full sm:w-auto" onClick={() => handleDirectBtn('/contact-us')}>
@@ -441,20 +441,19 @@ function Home() {
                     </div>
                 </div>
             </section>
-            {/* --- START: NEW About Us Section --- */}
-            <section id="about" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50"> {/* Subtle gradient background */}
+            <section id="about" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
                 <div className="container mx-auto px-4 sm:px-6">
                     <div className="max-w-4xl mx-auto text-center">
                         {/* Section Title and Intro */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }} // Animate when section scrolls into view
-                            viewport={{ once: true, amount: 0.5 }} // Trigger animation once
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.5 }}
                             transition={{ duration: 0.6 }}
                         >
                             <h2 className="text-3xl sm:text-4xl font-bold text-indigo-900 mb-6">About SmartSwipe</h2>
                             <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                SmartSwipe is a forward-thinking software development partner dedicated to crafting intelligent, high-performance solutions that drive real business results. We blend technical expertise with a deep understanding of your unique challenges to build software that not only functions flawlessly but also empowers growth and efficiency.
                             </p>
                         </motion.div>
 
@@ -463,12 +462,12 @@ function Home() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.5 }}
-                            transition={{ duration: 0.6, delay: 0.2 }} // Staggered animation
+                            transition={{ duration: 0.6, delay: 0.2 }}
                         >
                             <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 mb-10">
                                 <h3 className="text-2xl font-semibold text-blue-800 mb-4">Our Mission</h3>
                                 <p className="text-gray-600 leading-relaxed">
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio.
+                                    To empower businesses by delivering innovative, reliable, and scalable custom software solutions. We strive to streamline operations, enhance user experiences, and unlock new opportunities for our clients through strategic technology implementation and dedicated partnership.
                                 </p>
                             </div>
                         </motion.div>
@@ -478,34 +477,18 @@ function Home() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.5 }}
-                            transition={{ duration: 0.6, delay: 0.4 }} // Staggered animation
+                            transition={{ duration: 0.6, delay: 0.4 }}
                         >
                             <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
                                 <h3 className="text-2xl font-semibold text-blue-800 mb-4">Our Vision</h3>
                                 <p className="text-gray-600 leading-relaxed">
-                                    Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor.
+                                    To be a recognized leader in transforming businesses through cutting-edge software development, known for our commitment to quality, innovation, and client success. We envision a future where technology seamlessly integrates with business processes, creating smarter, more efficient organizations.
                                 </p>
                             </div>
                         </motion.div>
-
-                        {/* Optional Placeholder for future content */}
-                        {/*
-                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.5 }}
-                            transition={{ duration: 0.6, delay: 0.6 }}
-                         >
-                            <div className="mt-16">
-                                <p className="text-gray-500">More about our team and values coming soon...</p>
-                            </div>
-                         </motion.div>
-                         */}
                     </div>
                 </div>
             </section>
-            {/* --- END: NEW About Us Section --- */}
-
             <section id="contact" className="py-20 bg-gradient-to-b from-indigo-900 to-blue-900 text-center px-4">
                 <div className="container mx-auto max-w-4xl">
                     {/* ... (heading text remains the same) ... */}
